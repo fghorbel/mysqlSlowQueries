@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  apps_logs_forwarder:
+    image: registry.ma.lan/system_devteam/mysqlslowqueries:latest 
+    environment:
+      - FLUSH_THREAD_COUNT
+      - APPS_LOGS_LOG_PATTERN
+      - ELS_HOST
+      - NGNIX_FLUENTD_TIME_FORMAT
+      - ELS_USER
+      - ELS_PWD
+
+
+    ports:
+      - "24224:24224"
+    volumes:
+      - ${LOGS_DIR}:/mnt/logs
+      - ${LOGS_DIR_BUFFERS}:/mnt/buffers
+    restart: always
+    networks:
+      - apps_logs_backend
+
+networks:
+  apps_logs_backend:
+    driver: "bridge"
+
